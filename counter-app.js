@@ -22,6 +22,8 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
     super();
     this.title = "";
     this.count=0;
+    this.min=-100;
+    this.max=100;
     this.t = this.t || {};
     this.t = {
       ...this.t,
@@ -40,7 +42,9 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
   static get properties() {
     return {
       ...super.properties,
-      count: { type: Number, Reflect: true },
+      count: { type: Number, reflect: true },
+      min: { type: Number, reflect: true },
+      max: { type: Number, reflect: true },
     };
   }
 
@@ -54,12 +58,28 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-navigation);
       }
+      :host([count="18"]) {
+        color: var(--ddd-theme-default-original87Pink);
+      }
+      :host([count="21"]) {
+        color: var(--ddd-theme-default-futureLime);
+      }
+      :host([count="21"]) {
+        color: var(--ddd-theme-default-futureLime);
+      }
+      :host([count=]) {
+        color: var(--ddd-theme-default-futureLime);
+      }
+      
       .wrapper {
         margin: var(--ddd-spacing-2);
         padding: var(--ddd-spacing-4);
       }
       h3 span {
         font-size: var(--counter-app-label-font-size, var(--ddd-font-size-s));
+      }
+      .counter {
+        font-size: var(--counter-app-label-font-size, var(--ddd-font-size-xl));
       }
     `];
   }
@@ -68,10 +88,10 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
   render() {
     return html`
     <div class="wrapper">
-    <div class="counter">${this.count}</div>
+    <h1 class="counter">${this.count}</h1>
     <div class="buttons">
-      <button @click="${this.increase}">+1</button>
-      <button @click="${this.decrease}">-1</button>
+      <button @click="${this.increase}" ?disabled="${this.count === this.max}">+1</button>
+      <button @click="${this.decrease}" ?disabled="${this.count === this.min}">-1</button>
     </div>
     </div>`;
   }
@@ -90,6 +110,7 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
     return new URL(`./lib/${this.tag}.haxProperties.json`, import.meta.url)
       .href;
   }
+  
 }
 
 globalThis.customElements.define(CounterApp.tag, CounterApp);
